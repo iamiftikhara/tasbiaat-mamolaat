@@ -1,0 +1,336 @@
+{
+  "entries": [
+    {
+      "id": "entry_001",
+      "user_id": "usr_001",
+      "date": "2025-01-20",
+      "day_index": 45,
+      "saalik_level": 2,
+      "categories": {
+        "farayz": {
+          "فجر باجماعت": true,
+          "ظہر باجماعت": true,
+          "عصر باجماعت": true,
+          "مغرب باجماعت": true,
+          "عشاء باجماعت": false
+        },
+        "quran_tilawat": {
+          "سورہ یاسین": true,
+          "سورہ واقعہ": true,
+          "سورہ ملک": true,
+          "ادھا پارہ تلاوت": false
+        },
+        "zikr": {
+          "morning": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": true
+          },
+          "evening": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": false,
+            "100 پہلا کلمہ": true
+          }
+        },
+        "nawafil": {
+          "تہجد": false,
+          "اشراق": true,
+          "چاشت": true,
+          "اوابین": true,
+          "جمعہ کو صلاة التسبیح": false
+        },
+        "hifazat": {
+          "نظر کی حفاظت": true,
+          "زبان کی حفاظت": true,
+          "کان کی حفاظت": false
+        },
+        "sleep_wake": {
+          "sleep_time": "23:30",
+          "wake_time": "05:45"
+        }
+      },
+      "status": "submitted",
+      "submitted_at": "2025-01-20T21:30:00Z",
+      "murabi_comment": null,
+      "murabi_status": "pending",
+      "completion_percentage": 85
+    },
+    {
+      "id": "entry_002",
+      "user_id": "usr_001",
+      "date": "2025-01-19",
+      "day_index": 44,
+      "saalik_level": 2,
+      "categories": {
+        "farayz": {
+          "فجر باجماعت": true,
+          "ظہر باجماعت": false,
+          "عصر باجماعت": true,
+          "مغرب باجماعت": true,
+          "عشاء باجماعت": true
+        },
+        "quran_tilawat": {
+          "سورہ یاسین": true,
+          "سورہ واقعہ": true,
+          "سورہ ملک": false,
+          "ادھا پارہ تلاوت": true
+        },
+        "zikr": {
+          "morning": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": false
+          },
+          "evening": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": true
+          }
+        },
+        "nawafil": {
+          "تہجد": true,
+          "اشراق": true,
+          "چاشت": false,
+          "اوابین": true,
+          "جمعہ کو صلاة التسبیح": false
+        },
+        "hifazat": {
+          "نظر کی حفاظت": true,
+          "زبان کی حفاظت": false,
+          "کان کی حفاظت": true
+        },
+        "sleep_wake": {
+          "sleep_time": "23:45",
+          "wake_time": "05:30"
+        }
+      },
+      "status": "reviewed",
+      "submitted_at": "2025-01-19T22:15:00Z",
+      "murabi_comment": "بہت اچھا! نماز ظہر کا خیال رکھیں۔",
+      "murabi_status": "approved",
+      "reviewed_at": "2025-01-20T08:30:00Z",
+      "completion_percentage": 80
+    },
+    {
+      "id": "entry_003",
+      "user_id": "usr_002",
+      "date": "2025-01-20",
+      "day_index": 32,
+      "saalik_level": 1,
+      "categories": {
+        "farayz": {
+          "فجر باجماعت": false,
+          "ظہر باجماعت": true,
+          "عصر باجماعت": true,
+          "مغرب باجماعت": true,
+          "عشاء باجماعت": true
+        },
+        "quran_tilawat": {
+          "سورہ یاسین": true,
+          "سورہ واقعہ": false,
+          "سورہ ملک": true,
+          "ادھا پارہ تلاوت": false
+        },
+        "zikr": {
+          "morning": {
+            "100 استغفار": true,
+            "100 درود شریف": false,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": true
+          },
+          "evening": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": false
+          }
+        },
+        "nawafil": {
+          "تہجد": false,
+          "اشراق": false,
+          "چاشت": true,
+          "اوابین": true,
+          "جمعہ کو صلاة التسبیح": false
+        },
+        "hifazat": {
+          "نظر کی حفاظت": false,
+          "زبان کی حفاظت": true,
+          "کان کی حفاظت": false
+        },
+        "sleep_wake": {
+          "sleep_time": "00:15",
+          "wake_time": "06:30"
+        }
+      },
+      "status": "submitted",
+      "submitted_at": "2025-01-20T20:45:00Z",
+      "murabi_comment": null,
+      "murabi_status": "pending",
+      "completion_percentage": 65
+    },
+    {
+      "id": "entry_004",
+      "user_id": "usr_003",
+      "date": "2025-01-20",
+      "day_index": 15,
+      "saalik_level": 0,
+      "categories": {
+        "farayz": {
+          "فجر باجماعت": false,
+          "ظہر باجماعت": false,
+          "عصر باجماعت": true,
+          "مغرب باجماعت": true,
+          "عشاء باجماعت": true
+        },
+        "quran_tilawat": {
+          "سورہ یاسین": true,
+          "سورہ واقعہ": false,
+          "سورہ ملک": false,
+          "ادھا پارہ تلاوت": false
+        },
+        "zikr": {
+          "morning": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": false,
+            "100 پہلا کلمہ": false
+          },
+          "evening": {
+            "100 استغفار": false,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": false
+          }
+        },
+        "nawafil": {
+          "تہجد": false,
+          "اشراق": false,
+          "چاشت": false,
+          "اوابین": false,
+          "جمعہ کو صلاة التسبیح": false
+        },
+        "hifazat": {
+          "نظر کی حفاظت": false,
+          "زبان کی حفاظت": false,
+          "کان کی حفاظت": false
+        },
+        "sleep_wake": {
+          "sleep_time": "01:00",
+          "wake_time": "07:00"
+        }
+      },
+      "status": "reviewed",
+      "submitted_at": "2025-01-20T19:30:00Z",
+      "murabi_comment": "ابتدائی مرحلہ ہے، آہستہ آہستہ بہتری آئے گی۔ فجر کی نماز کی کوشش کریں۔",
+      "murabi_status": "approved",
+      "reviewed_at": "2025-01-20T09:15:00Z",
+      "completion_percentage": 40
+    },
+    {
+      "id": "entry_005",
+      "user_id": "usr_004",
+      "date": "2025-01-20",
+      "day_index": 67,
+      "saalik_level": 3,
+      "categories": {
+        "farayz": {
+          "فجر باجماعت": true,
+          "ظہر باجماعت": true,
+          "عصر باجماعت": true,
+          "مغرب باجماعت": true,
+          "عشاء باجماعت": true
+        },
+        "quran_tilawat": {
+          "سورہ یاسین": true,
+          "سورہ واقعہ": true,
+          "سورہ ملک": true,
+          "ادھا پارہ تلاوت": true
+        },
+        "zikr": {
+          "morning": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": true
+          },
+          "evening": {
+            "100 استغفار": true,
+            "100 درود شریف": true,
+            "100 تیسرا کلمہ": true,
+            "100 پہلا کلمہ": true
+          }
+        },
+        "nawafil": {
+          "تہجد": true,
+          "اشراق": true,
+          "چاشت": true,
+          "اوابین": true,
+          "جمعہ کو صلاة التسبیح": false
+        },
+        "hifazat": {
+          "نظر کی حفاظت": true,
+          "زبان کی حفاظت": true,
+          "کان کی حفاظت": true
+        },
+        "sleep_wake": {
+          "sleep_time": "22:30",
+          "wake_time": "04:30"
+        }
+      },
+      "status": "submitted",
+      "submitted_at": "2025-01-20T23:00:00Z",
+      "murabi_comment": null,
+      "murabi_status": "pending",
+      "completion_percentage": 95
+    }
+  ],
+  "weekly_summary": {
+    "week_start": "2025-01-13",
+    "week_end": "2025-01-19",
+    "total_entries": 28,
+    "average_completion": 78,
+    "top_performers": [
+      {
+        "user_id": "usr_004",
+        "name": "عائشہ احمد",
+        "completion_percentage": 92
+      },
+      {
+        "user_id": "usr_001",
+        "name": "احمد علی",
+        "completion_percentage": 85
+      }
+    ],
+    "categories_performance": {
+      "farayz": 82,
+      "quran_tilawat": 75,
+      "zikr": 80,
+      "nawafil": 65,
+      "hifazat": 70
+    }
+  },
+  "monthly_summary": {
+    "month": "2025-01",
+    "total_entries": 124,
+    "average_completion": 76,
+    "level_distribution": {
+      "0": 15,
+      "1": 25,
+      "2": 35,
+      "3": 30,
+      "4": 15,
+      "5": 3,
+      "6": 1
+    },
+    "region_performance": {
+      "Karachi": 78,
+      "Lahore": 74,
+      "Islamabad": 80,
+      "Faisalabad": 72
+    }
+  }
+}

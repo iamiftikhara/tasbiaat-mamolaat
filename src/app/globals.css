@@ -1,26 +1,514 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Ant Design Styles */
+@import 'antd/dist/reset.css';
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-family: var(--font-primary);
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-primary);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass Morphism Base */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-glass);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-glass);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.5);
+}
+
+/* Modern Button Styles */
+.btn-modern {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-xl);
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-modern:active {
+  transform: translateY(0);
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+/* Input Styles */
+.input-modern {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(203, 213, 225, 0.5);
+  border-radius: var(--radius-xl);
+  padding: 12px 16px;
+  font-size: 16px;
+  font-family: var(--font-primary);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.input-modern:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: rgba(255, 255, 255, 1);
+}
+
+/* Ant Design Customizations */
+.ant-layout {
+  background: transparent !important;
+}
+
+.ant-layout-content {
+  background: transparent !important;
+}
+
+.ant-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: var(--shadow-glass) !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.4) !important;
+}
+
+.ant-btn {
+  border-radius: var(--radius-xl) !important;
+  font-weight: 600 !important;
+  font-family: var(--font-primary) !important;
+  transition: all 0.3s ease !important;
+  height: auto !important;
+  padding: 8px 16px !important;
+}
+
+.ant-btn-primary {
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4) !important;
+}
+
+.ant-btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-glow) !important;
+  background: var(--gradient-primary) !important;
+}
+
+.ant-input {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(203, 213, 225, 0.5) !important;
+  border-radius: var(--radius-xl) !important;
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+  font-family: var(--font-primary) !important;
+  transition: all 0.3s ease !important;
+}
+
+.ant-input:focus {
+  border-color: var(--color-primary-500) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+  background: rgba(255, 255, 255, 1) !important;
+}
+
+.ant-input-password {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(203, 213, 225, 0.5) !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.ant-select-selector {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(203, 213, 225, 0.5) !important;
+  border-radius: var(--radius-xl) !important;
+  padding: 8px 12px !important;
+}
+
+.ant-table {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: var(--radius-2xl) !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+.ant-table-thead > tr > th {
+  background: rgba(248, 250, 252, 0.8) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
+  font-weight: 600 !important;
+  color: var(--color-neutral-700) !important;
+  font-family: var(--font-primary) !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: rgba(59, 130, 246, 0.05) !important;
+}
+
+.ant-menu {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.ant-menu-item {
+  border-radius: var(--radius-lg) !important;
+  margin: 4px 8px !important;
+  font-family: var(--font-primary) !important;
+}
+
+.ant-menu-item-selected {
+  background: rgba(59, 130, 246, 0.1) !important;
+  color: var(--color-primary-600) !important;
+}
+
+.ant-statistic {
+  text-align: center !important;
+}
+
+.ant-statistic-title {
+  font-weight: 600 !important;
+  color: var(--color-neutral-600) !important;
+  font-family: var(--font-primary) !important;
+}
+
+.ant-statistic-content {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  font-family: var(--font-display) !important;
+}
+
+.ant-tag {
+  border-radius: var(--radius-lg) !important;
+  font-weight: 500 !important;
+  border: none !important;
+  font-family: var(--font-primary) !important;
+  padding: 4px 12px !important;
+}
+
+.ant-progress-line {
+  border-radius: var(--radius-base) !important;
+}
+
+.ant-switch {
+  background: #cbd5e1 !important;
+  border-radius: var(--radius-full) !important;
+}
+
+.ant-switch-checked {
+  background: #3b82f6 !important;
+}
+
+.ant-form-item-label > label {
+  font-weight: 600 !important;
+  color: var(--color-neutral-700) !important;
+  font-family: var(--font-primary) !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .glass-card {
+    margin: 16px;
+    border-radius: var(--radius-xl);
+  }
+  
+  .btn-modern {
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+  
+  .input-modern {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Utility Classes */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+.backdrop-blur {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+:root {
+  --primary-dark: #1e3a8a;
+  --primary-light: #3b82f6;
+  --primary-lighter: #93c5fd;
+  --background-primary: #f8fafc;
+  --background-secondary: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Urdu font classes */
+.font-urdu {
+  font-family: 'Noto Nastaliq Urdu', 'Amiri', serif;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+.font-urdu-bold {
+  font-family: 'Noto Nastaliq Urdu', 'Amiri', serif;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+/* RTL support for Urdu text */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Modern Button Styles */
+.btn-primary {
+  @apply bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+}
+
+.btn-secondary {
+  @apply bg-white hover:bg-blue-50 text-blue-800 border-2 border-blue-200 hover:border-blue-300 font-semibold py-3 px-6 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-100 shadow-md hover:shadow-lg;
+}
+
+.btn-success {
+  @apply bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-emerald-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+}
+
+.btn-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-red-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+}
+
+.btn-outline {
+  @apply bg-transparent hover:bg-blue-800 text-blue-800 hover:text-white border-2 border-blue-800 font-semibold py-3 px-6 rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300;
+}
+
+/* Modern Card Styles */
+.card {
+  @apply bg-white rounded-2xl shadow-lg border border-blue-100 p-8 transition-all duration-300 hover:shadow-xl hover:border-blue-200;
+}
+
+.card-header {
+  @apply border-b border-blue-100 pb-6 mb-6;
+}
+
+.card-compact {
+  @apply bg-white rounded-xl shadow-md border border-blue-100 p-6 transition-all duration-300 hover:shadow-lg;
+}
+
+/* Modern Form Styles */
+.form-input {
+  @apply block w-full px-4 py-3 border-2 border-blue-200 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500 text-slate-700 transition-all duration-300;
+}
+
+.form-label {
+  @apply block text-sm font-semibold text-slate-700 mb-2;
+}
+
+.form-error {
+  @apply text-red-600 text-sm mt-2 font-medium;
+}
+
+/* Modern Status Indicators */
+.status-active {
+  @apply bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-full text-xs font-semibold border border-emerald-200;
+}
+
+.status-pending {
+  @apply bg-amber-100 text-amber-800 px-3 py-1.5 rounded-full text-xs font-semibold border border-amber-200;
+}
+
+.status-inactive {
+  @apply bg-red-100 text-red-800 px-3 py-1.5 rounded-full text-xs font-semibold border border-red-200;
+}
+
+/* Modern Progress Bars */
+.progress-bar {
+  @apply w-full bg-blue-100 rounded-full h-3 shadow-inner;
+}
+
+.progress-fill {
+  @apply h-3 rounded-full transition-all duration-500 bg-gradient-to-r from-blue-600 to-blue-800;
+}
+
+/* Modern Navigation */
+.nav-item {
+  @apply flex items-center px-4 py-3 text-slate-700 hover:text-blue-800 hover:bg-blue-50 rounded-xl transition-all duration-300 font-medium;
+}
+
+.nav-item-active {
+  @apply flex items-center px-4 py-3 text-blue-800 bg-blue-100 rounded-xl font-semibold border-l-4 border-blue-800;
+}
+
+/* Modern Gradients */
+.gradient-primary {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.gradient-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+/* Modern Shadows */
+.shadow-modern {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.shadow-modern-lg {
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+/* Islamic themed modern colors */
+.bg-islamic-primary {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+}
+
+.text-islamic-primary {
+  color: #1e3a8a;
+}
+
+.border-islamic-primary {
+  border-color: #3b82f6;
 }

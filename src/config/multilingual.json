@@ -1,0 +1,467 @@
+{
+  "defaultLanguage": "ur",
+  "supportedLanguages": ["ur", "en", "ar"],
+  "rtlLanguages": ["ur", "ar"],
+  "languages": {
+    "ur": {
+      "name": "اردو",
+      "code": "ur",
+      "flag": "🇵🇰",
+      "direction": "rtl"
+    },
+    "en": {
+      "name": "English",
+      "code": "en",
+      "flag": "🇺🇸",
+      "direction": "ltr"
+    },
+    "ar": {
+      "name": "العربية",
+      "code": "ar",
+      "flag": "🇸🇦",
+      "direction": "rtl"
+    }
+  },
+  "fonts": {
+    "ur": {
+      "primary": "'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif",
+      "secondary": "'Noto Sans Urdu', 'Tahoma', sans-serif",
+      "display": "'Amiri Quran', 'Scheherazade New', serif"
+    },
+    "en": {
+      "primary": "'Inter', 'Segoe UI', 'Roboto', sans-serif",
+      "secondary": "'Poppins', 'Open Sans', sans-serif",
+      "display": "'Playfair Display', 'Georgia', serif"
+    },
+    "ar": {
+      "primary": "'Noto Sans Arabic', 'Amiri', serif",
+      "secondary": "'Cairo', 'Tajawal', sans-serif",
+      "display": "'Amiri Quran', 'Scheherazade New', serif"
+    }
+  },
+  "colors": {
+    "primary": "#2C3E50",
+    "secondary": "#18BC9C",
+    "accent": "#3498DB",
+    "success": "#2ECC71",
+    "warning": "#F39C12",
+    "danger": "#E74C3C",
+    "info": "#3498DB",
+    "light": "#ECF0F1",
+    "dark": "#2C3E50",
+    "background": "#F8F9FA",
+    "surface": "#FFFFFF",
+    "text": {
+      "primary": "#2C3E50",
+      "secondary": "#7F8C8D",
+      "muted": "#BDC3C7",
+      "inverse": "#FFFFFF"
+    },
+    "gradients": {
+      "primary": "linear-gradient(135deg, #2C3E50 0%, #3498DB 100%)",
+      "secondary": "linear-gradient(135deg, #18BC9C 0%, #2ECC71 100%)",
+      "accent": "linear-gradient(135deg, #3498DB 0%, #9B59B6 100%)"
+    }
+  },
+  "translations": {
+    "ur": {
+      "app": {
+        "title": "البرہان تسبیحات معمولات",
+        "subtitle": "روحانی ترقی کا نظام",
+        "description": "یہ ایپ آپ کی روحانی ترقی کو ٹریک کرنے میں مدد کرتی ہے"
+      },
+      "auth": {
+        "login": "لاگ ان",
+        "logout": "لاگ آؤٹ",
+        "email": "ای میل",
+        "phone": "فون نمبر",
+        "password": "پاس ورڈ",
+        "forgotPassword": "پاس ورڈ بھول گئے؟",
+        "rememberMe": "مجھے یاد رکھیں",
+        "loginButton": "داخل ہوں",
+        "signingIn": "داخل ہو رہے ہیں...",
+        "welcome": "خوش آمدید",
+        "emailRequired": "ای میل درکار ہے",
+        "emailInvalid": "درست ای میل درج کریں",
+        "emailPlaceholder": "اپنا ای میل درج کریں",
+        "passwordRequired": "پاس ورڈ درکار ہے",
+        "passwordMinLength": "پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے",
+        "passwordPlaceholder": "اپنا پاس ورڈ درج کریں"
+      },
+      "navigation": {
+        "dashboard": "ڈیش بورڈ",
+        "profile": "پروفائل",
+        "settings": "سیٹنگز",
+        "reports": "رپورٹس",
+        "history": "تاریخ",
+        "help": "مدد"
+      },
+      "roles": {
+        "Saalik": "سالک",
+        "Murabi": "مربی",
+        "Masool": "مسؤول",
+        "Sheikh": "شیخ",
+        "Admin": "ایڈمن"
+      },
+      "levels": {
+        "0": "ابتدائی",
+        "1": "معمولات ابتدائی",
+        "2": "بالجبر ذکر",
+        "3": "الفاس پاس",
+        "4": "لطائف",
+        "5": "الاذکار سلطان",
+        "6": "اثبات نفی"
+      },
+      "categories": {
+        "farayz": {
+          "title": "فرائض",
+          "items": {
+            "فجر باجماعت": "فجر باجماعت",
+            "ظہر باجماعت": "ظہر باجماعت",
+            "عصر باجماعت": "عصر باجماعت",
+            "مغرب باجماعت": "مغرب باجماعت",
+            "عشاء باجماعت": "عشاء باجماعت"
+          }
+        },
+        "quran_tilawat": {
+          "title": "قرآن تلاوت",
+          "items": {
+            "سورہ یاسین": "سورہ یاسین",
+            "سورہ واقعہ": "سورہ واقعہ",
+            "سورہ ملک": "سورہ ملک",
+            "ادھا پارہ تلاوت": "ادھا پارہ تلاوت"
+          }
+        },
+        "zikr": {
+          "title": "ذکر",
+          "morning": "صبح کے اذکار",
+          "evening": "شام کے اذکار",
+          "items": {
+            "100 استغفار": "100 استغفار",
+            "100 درود شریف": "100 درود شریف",
+            "100 تیسرا کلمہ": "100 تیسرا کلمہ",
+            "100 پہلا کلمہ": "100 پہلا کلمہ"
+          }
+        },
+        "nawafil": {
+          "title": "نوافل",
+          "items": {
+            "تہجد": "تہجد",
+            "اشراق": "اشراق",
+            "چاشت": "چاشت",
+            "اوابین": "اوابین",
+            "جمعہ کو صلاة التسبیح": "جمعہ کو صلاة التسبیح"
+          }
+        },
+        "hifazat": {
+          "title": "حفاظت کرنے کی چیزیں",
+          "items": {
+            "نظر کی حفاظت": "نظر کی حفاظت",
+            "زبان کی حفاظت": "زبان کی حفاظت",
+            "کان کی حفاظت": "کان کی حفاظت"
+          }
+        },
+        "sleep_wake": {
+          "title": "سونے اور جاگنے کا وقت",
+          "sleep_time": "سونے کا وقت",
+          "wake_time": "جاگنے کا وقت"
+        }
+      },
+      "actions": {
+        "save": "محفوظ کریں",
+        "submit": "جمع کریں",
+        "cancel": "منسوخ",
+        "edit": "تبدیل کریں",
+        "delete": "حذف کریں",
+        "view": "دیکھیں",
+        "approve": "منظور کریں",
+        "reject": "مسترد کریں",
+        "export": "ایکسپورٹ",
+        "filter": "فلٹر",
+        "search": "تلاش"
+      },
+      "messages": {
+        "success": "کامیابی سے مکمل ہوا",
+        "error": "خرابی ہوئی",
+        "loading": "لوڈ ہو رہا ہے...",
+        "noData": "کوئی ڈیٹا نہیں ملا",
+        "confirmDelete": "کیا آپ واقعی حذف کرنا چاہتے ہیں؟"
+      }
+    },
+    "en": {
+      "app": {
+        "title": "Al-Burhan Tasbihat Mamolaat",
+        "subtitle": "Spiritual Progress System",
+        "description": "This app helps you track your spiritual development"
+      },
+      "auth": {
+        "login": "Login",
+        "logout": "Logout",
+        "email": "Email",
+        "phone": "Phone Number",
+        "password": "Password",
+        "forgotPassword": "Forgot Password?",
+        "rememberMe": "Remember Me",
+        "loginButton": "Sign In",
+        "signingIn": "Signing in...",
+        "welcome": "Welcome",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email",
+        "emailPlaceholder": "Enter your email",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 6 characters",
+        "passwordPlaceholder": "Enter your password"
+      },
+      "navigation": {
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "settings": "Settings",
+        "reports": "Reports",
+        "history": "History",
+        "help": "Help"
+      },
+      "roles": {
+        "Saalik": "Seeker",
+        "Murabi": "Mentor",
+        "Masool": "Supervisor",
+        "Sheikh": "Sheikh",
+        "Admin": "Administrator"
+      },
+      "levels": {
+        "0": "Beginner",
+        "1": "Basic Routine",
+        "2": "Compulsory Remembrance",
+        "3": "Al-Faas Pass",
+        "4": "Lataif",
+        "5": "Al-Azkar Sultan",
+        "6": "Isbat Nafi"
+      },
+      "categories": {
+        "farayz": {
+          "title": "Obligatory Prayers",
+          "items": {
+            "فجر باجماعت": "Fajr in Congregation",
+            "ظہر باجماعت": "Zuhr in Congregation",
+            "عصر باجماعت": "Asr in Congregation",
+            "مغرب باجماعت": "Maghrib in Congregation",
+            "عشاء باجماعت": "Isha in Congregation"
+          }
+        },
+        "quran_tilawat": {
+          "title": "Quran Recitation",
+          "items": {
+            "سورہ یاسین": "Surah Yaseen",
+            "سورہ واقعہ": "Surah Al-Waqiah",
+            "سورہ ملک": "Surah Al-Mulk",
+            "ادھا پارہ تلاوت": "Half Para Recitation"
+          }
+        },
+        "zikr": {
+          "title": "Remembrance",
+          "morning": "Morning Remembrance",
+          "evening": "Evening Remembrance",
+          "items": {
+            "100 استغفار": "100 Istighfar",
+            "100 درود شریف": "100 Durood Sharif",
+            "100 تیسرا کلمہ": "100 Third Kalima",
+            "100 پہلا کلمہ": "100 First Kalima"
+          }
+        },
+        "nawafil": {
+          "title": "Voluntary Prayers",
+          "items": {
+            "تہجد": "Tahajjud",
+            "اشراق": "Ishraq",
+            "چاشت": "Chasht",
+            "اوابین": "Awabeen",
+            "جمعہ کو صلاة التسبیح": "Salat al-Tasbih on Friday"
+          }
+        },
+        "hifazat": {
+          "title": "Protective Practices",
+          "items": {
+            "نظر کی حفاظت": "Guarding the Eyes",
+            "زبان کی حفاظت": "Guarding the Tongue",
+            "کان کی حفاظت": "Guarding the Ears"
+          }
+        },
+        "sleep_wake": {
+          "title": "Sleep and Wake Times",
+          "sleep_time": "Sleep Time",
+          "wake_time": "Wake Time"
+        }
+      },
+      "actions": {
+        "save": "Save",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "view": "View",
+        "approve": "Approve",
+        "reject": "Reject",
+        "export": "Export",
+        "filter": "Filter",
+        "search": "Search"
+      },
+      "messages": {
+        "success": "Successfully completed",
+        "error": "An error occurred",
+        "loading": "Loading...",
+        "noData": "No data found",
+        "confirmDelete": "Are you sure you want to delete?"
+      }
+    },
+    "ar": {
+      "app": {
+        "title": "البرهان تسبيحات معمولات",
+        "subtitle": "نظام التقدم الروحي",
+        "description": "هذا التطبيق يساعدك على تتبع تطورك الروحي"
+      },
+      "auth": {
+        "login": "تسجيل الدخول",
+        "logout": "تسجيل الخروج",
+        "email": "البريد الإلكتروني",
+        "phone": "رقم الهاتف",
+        "password": "كلمة المرور",
+        "forgotPassword": "نسيت كلمة المرور؟",
+        "rememberMe": "تذكرني",
+        "loginButton": "دخول",
+        "welcome": "أهلاً وسهلاً"
+      },
+      "navigation": {
+        "dashboard": "لوحة التحكم",
+        "profile": "الملف الشخصي",
+        "settings": "الإعدادات",
+        "reports": "التقارير",
+        "history": "التاريخ",
+        "help": "المساعدة"
+      },
+      "roles": {
+        "Saalik": "السالك",
+        "Murabi": "المربي",
+        "Masool": "المسؤول",
+        "Sheikh": "الشيخ",
+        "Admin": "المدير"
+      },
+      "levels": {
+        "0": "المبتدئ",
+        "1": "المعمولات الابتدائية",
+        "2": "بالجبر ذكر",
+        "3": "الفاس باس",
+        "4": "اللطائف",
+        "5": "الأذكار سلطان",
+        "6": "إثبات نفي"
+      },
+      "categories": {
+        "farayz": {
+          "title": "الفرائض",
+          "items": {
+            "فجر باجماعت": "الفجر بالجماعة",
+            "ظہر باجماعت": "الظهر بالجماعة",
+            "عصر باجماعت": "العصر بالجماعة",
+            "مغرب باجماعت": "المغرب بالجماعة",
+            "عشاء باجماعت": "العشاء بالجماعة"
+          }
+        },
+        "quran_tilawat": {
+          "title": "تلاوة القرآن",
+          "items": {
+            "سورہ یاسین": "سورة يس",
+            "سورہ واقعہ": "سورة الواقعة",
+            "سورہ ملک": "سورة الملك",
+            "ادھا پارہ تلاوت": "تلاوة نصف جزء"
+          }
+        },
+        "zikr": {
+          "title": "الذكر",
+          "morning": "أذكار الصباح",
+          "evening": "أذكار المساء",
+          "items": {
+            "100 استغفار": "100 استغفار",
+            "100 درود شریف": "100 صلاة على النبي",
+            "100 تیسرا کلمہ": "100 الكلمة الثالثة",
+            "100 پہلا کلمہ": "100 الكلمة الأولى"
+          }
+        },
+        "nawafil": {
+          "title": "النوافل",
+          "items": {
+            "تہجد": "التهجد",
+            "اشراق": "الإشراق",
+            "چاشت": "الضحى",
+            "اوابین": "الأوابين",
+            "جمعہ کو صلاة التسبیح": "صلاة التسبيح يوم الجمعة"
+          }
+        },
+        "hifazat": {
+          "title": "أشياء الحفظ",
+          "items": {
+            "نظر کی حفاظت": "حفظ البصر",
+            "زبان کی حفاظت": "حفظ اللسان",
+            "کان کی حفاظت": "حفظ السمع"
+          }
+        },
+        "sleep_wake": {
+          "title": "أوقات النوم والاستيقاظ",
+          "sleep_time": "وقت النوم",
+          "wake_time": "وقت الاستيقاظ"
+        }
+      },
+      "actions": {
+        "save": "حفظ",
+        "submit": "إرسال",
+        "cancel": "إلغاء",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "view": "عرض",
+        "approve": "موافقة",
+        "reject": "رفض",
+        "export": "تصدير",
+        "filter": "تصفية",
+        "search": "بحث"
+      },
+      "messages": {
+        "success": "تم بنجاح",
+        "error": "حدث خطأ",
+        "loading": "جاري التحميل...",
+        "noData": "لا توجد بيانات",
+        "confirmDelete": "هل أنت متأكد من الحذف؟"
+      }
+    }
+  },
+  "dateFormats": {
+    "ur": {
+      "short": "DD/MM/YYYY",
+      "long": "DD MMMM YYYY",
+      "time": "HH:mm"
+    },
+    "en": {
+      "short": "MM/DD/YYYY",
+      "long": "MMMM DD, YYYY",
+      "time": "hh:mm A"
+    },
+    "ar": {
+      "short": "DD/MM/YYYY",
+      "long": "DD MMMM YYYY",
+      "time": "HH:mm"
+    }
+  },
+  "numberFormats": {
+    "ur": {
+      "decimal": ".",
+      "thousands": ",",
+      "currency": "Rs."
+    },
+    "en": {
+      "decimal": ".",
+      "thousands": ",",
+      "currency": "$"
+    },
+    "ar": {
+      "decimal": ".",
+      "thousands": ",",
+      "currency": "ر.س"
+    }
+  }
+}
