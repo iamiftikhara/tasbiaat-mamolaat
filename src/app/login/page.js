@@ -6,7 +6,20 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useMultilingual } from '../../hooks/useMultilingual';
 import { useRouter } from 'next/navigation';
 import { GlobalOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
-import { Select, Space, Alert, Modal, Input, message } from 'antd';
+import PersonIcon from '@mui/icons-material/Person';
+import LoginIcon from '@mui/icons-material/Login';
+import { Select, Space, Modal, Input } from 'antd';
+import Script from 'next/script';
+import Swal from 'sweetalert2';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import CryptoJS from 'crypto-js';
+
+// API base URL
+const API_BASE_URL = 'https://zikar-bd.vercel.app/api/v1';
+
+// Encryption key (in a real app, this should be stored securely)
+const ENCRYPTION_KEY = 'al-burhan-secure-key-2024';
 
 // Material UI imports
 import { 
@@ -19,7 +32,10 @@ import {
   IconButton, 
   Checkbox, 
   FormControlLabel,
-  CircularProgress
+  CircularProgress,
+  Select as MuiSelect,
+  MenuItem,
+  Divider
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
@@ -70,7 +86,7 @@ const LoginCard = styled(Box)({
   display: 'flex',
   maxWidth: '1000px',
   width: '100%',
-  height: '600px',
+  height: '650px',
   '@media (max-width: 768px)': {
     height: '100vh',
     borderRadius: '0',
@@ -194,10 +210,20 @@ export default function LoginPage() {
   const [contactIdentifier, setContactIdentifier] = useState('');
   const [higherRoleContact, setHigherRoleContact] = useState(null);
   const [forgotLoading, setForgotLoading] = useState(false);
+  const [loginInputType, setLoginInputType] = useState('email'); // 'email' or 'phone'
+  const [countryCode, setCountryCode] = useState('+92'); // Default country code
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const theme = useTheme();
   const { login, user } = useAuth();
   const { t, getCurrentFont, changeLanguage, currentLanguage, supportedLanguages, languages } = useMultilingual();
   const router = useRouter();
+  
+  // No need for toast configuration in useEffect as ToastContainer handles this
+  useEffect(() => {
+    // React-Toastify configuration is now handled by the ToastContainer component
+  }, []);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -213,23 +239,206 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
+  // Toggle between email and phone input
+  const toggleLoginInputType = () => {
+    setLoginInputType(prev => prev === 'email' ? 'phone' : 'email');
+  };
+
+  // Validate email
+  const validateEmail = (email) => {
+    // Only validate if there's at least one character
+    if (!email || email.trim() === '') {
+      setEmailError('');
+      return true;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(email);
+    setEmailError(isValid ? '' : 'Please enter a valid email address');
+    return isValid;
+  };
+
+  // Validate phone number
+  const validatePhone = (phone) => {
+    // Only validate if there's at least one character
+    if (!phone || phone.trim() === '') {
+      setPhoneError('');
+      return true;
+    }
+    
+    // Remove any non-digit characters
+    const cleanPhone = phone.replace(/\D/g, '');
+    
+    // For Pakistani numbers, accept with or without leading zero
+    let isValid = false;
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+      // Valid format with leading zero (03xxxxxxxxx) - 11 digits
+      isValid = true;
+    } else if (cleanPhone.length === 10 && !cleanPhone.startsWith('0')) {
+      // Valid format without leading zero (3xxxxxxxxx) - 10 digits
+      isValid = true;
+    } else if (cleanPhone.length === 12 && cleanPhone.startsWith('92')) {
+      // Valid format with country code (923xxxxxxxxx) - 12 digits
+      isValid = true;
+    }
+    
+    setPhoneError(isValid ? '' : 'Please enter a valid Pakistani phone number (e.g., 03xxxxxxxxx or 3xxxxxxxxx)');
+    return isValid;
+  };
+  
+  // Format Pakistani phone number
+  const formatPakistaniPhone = (phone) => {
+    // Remove any non-digit characters
+    let cleanPhone = phone.replace(/\D/g, '');
+    
+    // Handle Pakistani numbers
+    if (cleanPhone.startsWith('0')) {
+      // If starts with 0, replace with +92
+      return '+92' + cleanPhone.substring(1);
+    } else {
+      // If no leading zero, add +92
+      return '+92' + cleanPhone;
+    }
+  };
+  
+  // Encrypt password before sending to API
+  const encryptPassword = (password) => {
+    try {
+      return CryptoJS.AES.encrypt(password, ENCRYPTION_KEY).toString();
+    } catch (error) {
+      console.error('Encryption error:', error);
+      return password; // Fallback to unencrypted password if encryption fails
+    }
+  };
+  
+  // Validate password
+  const validatePassword = (password) => {
+    // Only validate if there's at least one character
+    if (!password || password === '') {
+      setPasswordError('');
+      return true;
+    }
+    
+    const isValid = password.length >= 6;
+    setPasswordError(isValid ? '' : 'Password must be at least 6 characters');
+    return isValid;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
     setError('');
     
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email');
+    let identifier;
     const password = formData.get('password');
     
+    // Get and validate the identifier (email or phone)
+    if (loginInputType === 'email') {
+      identifier = formData.get('email');
+      if (!validateEmail(identifier)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Email',
+          text: 'Please enter a valid email address.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: theme.getColor('primary', 500),
+          timer: 3000,
+          timerProgressBar: true
+        });
+        return;
+      }
+    } else {
+      const phoneNumber = formData.get('phone');
+      // Format Pakistani phone number
+      identifier = formatPakistaniPhone(phoneNumber);
+      if (!validatePhone(phoneNumber)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid Phone Number',
+          text: 'Please enter a valid phone number.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: theme.getColor('primary', 500),
+          timer: 3000,
+          timerProgressBar: true
+        });
+        return;
+      }
+    }
+    
+    // Validate all fields before submission
+      let isValid = true;
+      if (loginInputType === 'email') {
+        isValid = validateEmail(identifier) && isValid;
+      } else {
+        isValid = validatePhone(identifier) && isValid;
+      }
+      isValid = validatePassword(password) && isValid;
+     
+     if (!isValid) {
+       return; // Don't proceed if validation fails
+     }
+    
+    setLoading(true);
+    
     try {
-      const result = await login(email, password);
+      // Encrypt password before sending to API
+      const encryptedPassword = encryptPassword(password);
       
-      if (!result.success) {
-        setError(result.error || 'Login failed. Please try again.');
+      // Call the login API endpoint
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: identifier, // Send either email or phone in the email field
+          password: encryptedPassword
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Store tokens in localStorage or secure cookie
+        localStorage.setItem('access_token', data.data.access_token);
+        localStorage.setItem('refresh_token', data.data.refresh_token);
+        
+        // Show success message with SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful',
+          text: 'Welcome back!',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+        
+        // Call the login function from AuthContext to update the user state
+        await login(data.data.user, data.data.access_token);
+      } else {
+        // Show error message with SweetAlert
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: data.message || 'Please try again.',
+          timer: 3000,
+          timerProgressBar: true,
+          confirmButtonText: 'OK',
+          confirmButtonColor: theme.getColor('primary', 500)
+        });
       }
     } catch (err) {
-      setError('Network error. Please check your connection and try again.');
+      // Show network error with SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: 'Network Error',
+        text: 'Please check your connection and try again.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: theme.getColor('primary', 500),
+        timer: 3000,
+        timerProgressBar: true
+      });
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -241,32 +450,62 @@ export default function LoginPage() {
   
   const handleForgotPassword = async () => {
     if (!contactIdentifier) {
-      message.error(t('login.enterEmailOrPhone'));
+      // Show notification for missing email/phone
+      toast.error(t('login.enterEmailOrPhone'), {
+        icon: () => <MailOutlined style={{ color: '#fff' }} />
+      });
       return;
     }
     
     setForgotLoading(true);
     try {
-      // Mock API call - in real implementation, this would call your backend
-      // The API would return the higher role contact details
-      // Simulating API response for demonstration
-      setTimeout(() => {
-        const mockResponse = {
-          success: true,
-          higherRole: {
-            role: 'Murabi',
-            name: 'Ahmed Khan',
-            email: 'ahmed.khan@example.com',
-            phone: '+92 300 1234567'
-          }
-        };
-        
-        setHigherRoleContact(mockResponse.higherRole);
-        setForgotLoading(false);
-      }, 1000);
+      // Call the forgot password API endpoint
+      const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone_or_email: contactIdentifier
+        }),
+      });
       
+      const data = await response.json();
+      
+      if (data.success) {
+        // Set the higher role contact information from the API response
+        setHigherRoleContact({
+          role: data.data.contact.role,
+          name: data.data.contact.name,
+          email: data.data.contact.contact.email,
+          phone: data.data.contact.contact.phone
+        });
+        
+        // Show success notification
+         toast.success(t('login.contactInfoRetrieved'), {
+           icon: () => <PhoneOutlined style={{ color: '#fff' }} />
+         });
+      } else {
+        // Show error with SweetAlert
+        Swal.fire({
+          icon: 'error',
+          title: t('login.errorOccurred'),
+          text: data.message || t('login.errorContactingServer'),
+          confirmButtonText: t('common.ok'),
+          confirmButtonColor: theme.getColor('primary', 500)
+        });
+      }
     } catch (error) {
-      message.error(t('login.errorContactingServer'));
+      // Show error with SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: t('login.errorOccurred'),
+        text: t('login.errorContactingServer'),
+        confirmButtonText: t('common.ok'),
+        confirmButtonColor: theme.getColor('primary', 500)
+      });
+      console.error('Forgot password error:', error);
+    } finally {
       setForgotLoading(false);
     }
   };
@@ -279,308 +518,447 @@ export default function LoginPage() {
 
   return (
     <GradientBackground>
-      <LoginCard>
-        {/* Form Section */}
-        <FormSection>
-          {/* Language Switcher - Moved before the title */}
-          <Box display="flex" justifyContent="flex-end" width="100%" mb={2}>
-            <Select
-              value={currentLanguage}
-              onChange={changeLanguage}
-              style={{
-                width: '120px',
-                borderRadius: theme.getRadius('xl')
-              }}
-              size="large"
-              suffixIcon={<GlobalOutlined style={{ color: theme.getColor('primary', 500) }} />}
-              classNames={{ popup: { root: 'language-dropdown' } }}
-            >
-              {supportedLanguages.map((lang) => (
-                <Select.Option key={lang} value={lang}>
-                  <Space>
-                    <span>{languages[lang]?.flag}</span>
-                    <span style={{ fontFamily: getCurrentFont('primary') }}>
-                      {languages[lang]?.name}
-                    </span>
-                  </Space>
-                </Select.Option>
-              ))}
-            </Select>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-            <Box 
-              sx={{ 
-                width: 40, 
-                height: 40, 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                background: theme.getGradient('primary'),
-                mr: 2
-              }}
-            >
-              <img 
-                src="/logo.svg" 
-                alt="Logo" 
-                style={{ width: 24, height: 24 }}
-                onError={(e) => {
-                  e.target.style.display = 'none';
+      {/* Toast Container for notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 4 }}>
+        <LoginCard>
+          {/* Form Section */}
+          <FormSection>
+            {/* Language Switcher - Moved before the title */}
+            <Box display="flex" justifyContent="flex-end" width="100%" mb={2}>
+              <Select
+                value={currentLanguage}
+                onChange={changeLanguage}
+                style={{
+                  width: '120px',
+                  borderRadius: theme.getRadius('xl')
                 }}
-              />
-            </Box>
-            <Typography variant="h6" fontWeight="bold" color="primary">
-              {t('app.title')}
-            </Typography>
-          </Box>
-
-          <Typography variant="h4" fontWeight="bold" sx={{ mt: 4, mb: 1 }}>
-            {t('login.welcomeBack') || "Welcome back"}
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            {t('login.enterDetails') || "Please enter your account details"}
-          </Typography>
-
-          {error && (
-            <Alert
-              message={error}
-              type="error"
-              showIcon
-              className="mb-4 rounded-xl"
-              style={{ 
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.2)'
-              }}
-            />
-          )}
-
-          <Box component="form" onSubmit={handleSubmit} noValidate>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label={t('login.emailAddress') || "Email"}
-              name="email"
-              autoComplete="email"
-              autoFocus
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <EmailIcon color="action" />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ mb: 2 }}
-            />
-
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label={t('login.password') || "Password"}
-              type={showPassword ? "text" : "password"}
-              id="password"
-              autoComplete="current-password"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LockIcon color="action" />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleTogglePassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ mb: 2 }}
-            />
-
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <FormControlLabel
-                control={
-                  <Checkbox 
-                    value="remember" 
-                    color="primary" 
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                  />
-                }
-                label={t('login.keepMeLoggedIn') || "Keep me logged in"}
-              />
-              <Typography 
-                variant="body2" 
-                color="primary" 
-                sx={{ cursor: 'pointer' }}
-                onClick={() => setForgotModalVisible(true)}
+                size="large"
+                suffixIcon={<GlobalOutlined style={{ color: theme.getColor('primary', 500) }} />}
+                classNames={{ popup: { root: 'language-dropdown' } }}
               >
-                {t('login.forgotPassword') || 'Forgot Password?'}
+                {supportedLanguages.map((lang) => (
+                  <Select.Option key={lang} value={lang}>
+                    <Space>
+                      <span>{languages[lang]?.flag}</span>
+                      <span style={{ fontFamily: getCurrentFont('primary') }}>
+                        {languages[lang]?.name}
+                      </span>
+                    </Space>
+                  </Select.Option>
+                ))}
+              </Select>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Box 
+                sx={{ 
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: '50%', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  background: theme.getGradient('primary'),
+                  mr: 2
+                }}
+              >
+                <img 
+                  src="/logo.svg" 
+                  alt="Logo" 
+                  style={{ width: 24, height: 24 }}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </Box>
+              <Typography variant="h6" fontWeight="bold" color="primary">
+                {t('app.title')}
               </Typography>
             </Box>
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ 
-                py: 1.5, 
-                background: 'linear-gradient(to right, #ec4899, #8b5cf6)',
-                '&:hover': {
-                  background: 'linear-gradient(to right, #d946ef, #8b5cf6)',
-                }
-              }}
-              disabled={loading}
-            >
-              {loading ? <CircularProgress size={24} color="inherit" /> : t('login.signIn') || 'Sign in'}
-            </Button>
+            <Typography variant="h4" fontWeight="bold" sx={{ mt: 2, mb: 1 }}>
+              {t('login.welcomeBack') || "Welcome back"}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+              {t('login.enterDetails') || "Please enter your account details"}
+            </Typography>
+
+            {error && (
+              <Alert
+                message={error}
+                type="error"
+                showIcon
+                className="mb-4 rounded-xl"
+                style={{ 
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.2)'
+                }}
+              />
+            )}
+
+            <Box component="form" onSubmit={handleSubmit} noValidate>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                <Typography variant="body2" color="text.secondary">
+                  {"Login with"}
+                </Typography>
+                <Button 
+                    variant="contained" 
+                    color="primary"
+                    size="small" 
+                    onClick={toggleLoginInputType}
+                    type="button"
+                    startIcon={loginInputType === 'email' ? <PhoneOutlined /> : <EmailIcon />}
+                    sx={{ borderRadius: '4px', textTransform: 'none' }}
+                  >
+                    {loginInputType === 'email' ? 'Use Phone Number' : 'Use Email'}
+                  </Button>
+              </Box>
+              
+              {loginInputType === 'email' ? (
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label={t('login.emailAddress') || "Email"}
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  error={!!emailError}
+                  helperText={emailError}
+                  onChange={(e) => validateEmail(e.target.value)}
+                  onBlur={(e) => validateEmail(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon color="action" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{ mb: 2 }}
+                />
+              ) : (
+                <Box sx={{ mb: 2 }}>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <MuiSelect
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      sx={{ width: '30%' }}
+                      size="small"
+                      error={!!phoneError}
+                    >
+                      <MenuItem value="+92">+92 (Pak)</MenuItem>
+                      <MenuItem value="+1">+1 (USA/Canada)</MenuItem>
+                      <MenuItem value="+44">+44 (UK)</MenuItem>
+                      <MenuItem value="+91">+91 (India)</MenuItem>
+                      <MenuItem value="+971">+971 (UAE)</MenuItem>
+                      <MenuItem value="+966">+966 (KSA)</MenuItem>
+                    </MuiSelect>
+                    <TextField
+                      required
+                      fullWidth
+                      id="phone"
+                      name="phone"
+                      placeholder="Enter phone number"
+                      error={!!phoneError}
+                      onChange={(e) => validatePhone(e.target.value)}
+                      onBlur={(e) => validatePhone(e.target.value)}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PhoneOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Box>
+                  {phoneError && (
+                    <Typography variant="caption" color="error" sx={{ mt: 1, display: 'block' }}>
+                      {phoneError}
+                    </Typography>
+                  )}
+                </Box>
+              )}
+
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label={t('login.password') || "Password"}
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                autoComplete="current-password"
+                error={!!passwordError}
+                helperText={passwordError}
+                onChange={(e) => validatePassword(e.target.value)}
+                onBlur={(e) => validatePassword(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon color="action" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleTogglePassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ mb: 2 }}
+              />
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox 
+                      value="remember" 
+                      color="primary" 
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                    />
+                  }
+                  label={t('login.keepMeLoggedIn') || "Keep me logged in"}
+                />
+                <Typography 
+                  variant="body2" 
+                  color="primary" 
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => setForgotModalVisible(true)}
+                >
+                  {t('login.forgotPassword') || 'Forgot Password?'}
+                </Typography>
+              </Box>
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ 
+                  py: 1.5, 
+                  background: 'linear-gradient(to right, #ec4899, #8b5cf6)',
+                  '&:hover': {
+                    background: 'linear-gradient(to right, #d946ef, #8b5cf6)',
+                  }
+                }}
+                disabled={loading}
+              >
+                {loading ? <CircularProgress size={24} color="inherit" /> : t('login.signIn') || 'Sign in'}
+              </Button>
+              
+            </Box>
+          </FormSection>
+
+          {/* Spiritual Guidance Section */}
+          <TestimonialSection className="position-relative overflow-hidden" 
+                              style={{
+                                backgroundColor: "#00000091",
+                                minHeight: "600px"
+                              }}>
             
-           </Box>
-         </FormSection>
-
-         {/* Spiritual Guidance Section */}
-         <TestimonialSection className="position-relative overflow-hidden" 
-                            style={{
-                              backgroundColor: "#00000091",
-                              minHeight: "600px"
-                            }}>
-           
-           {/* Urdu Section */}
-           <div className="position-absolute top-0 start-0 w-100 h-100 p-4 p-md-5 d-flex flex-column justify-content-between"
-                style={{
-                  opacity: 1,
-                  animation: 'slideSection1 10s infinite',
-                  zIndex: 2
-                }}>
-             {/* Title - Urdu */}
-              <div className="text-end mb-2">
-                <Typography variant="h2" className="fw-semibold text-white" style={{fontFamily: "serif", direction: "rtl", fontSize: "2.5rem"}}>
-                  رُوحَانِی سَفَر
-                </Typography>
-                <Typography variant="h5" className="fw-medium text-white-50 text-end" style={{direction: "rtl"}}>
-                  روزانہ کی عبادات کے ذریعے روحانی ترقی
-                </Typography>
-              </div>
-             
-             {/* Content - Urdu */}
-             <div className="d-flex flex-column gap-4">
-               <div className="p-4 rounded-3 border border-white border-opacity-25">
-                 <Typography variant="body1" className="text-white fw-medium mb-4 text-end" style={{fontSize: '1.1rem', lineHeight: 1.6, direction: 'rtl'}}>
-                   "ذکر اللہ سے دل کو سکون ملتا ہے۔ روزانہ کے معمولات سے روحانی ترقی کا سفر شروع ہوتا ہے۔"
-                 </Typography>
-                 <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
-                   - شیخ محمد
-                 </Typography>
-                 <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
-                   مرشد سلسلہ نقشبندیہ
-                 </Typography>
-               </div>
-               
-               <div className="p-4 rounded-3 border border-white border-opacity-25">
-                 <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
-                   روحانی ترقی روزانہ کی عبادات کے ذریعے
-                 </Typography>
-                 <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
-                   اپنے روزانہ کے معمولات کو منظم کریں اور اپنی روحانی ترقی کا نقشہ دیکھیں۔
-                 </Typography>
-               </div>
-             </div>
-           </div>
-           
-           {/* English Section */}
-           <div className="position-absolute top-0 start-0 w-100 h-100 p-4 p-md-5 d-flex flex-column justify-content-between"
-                style={{
-                  opacity: 0,
-                  animation: 'slideSection2 10s infinite',
-                  zIndex: 1
-                }}>
-             {/* Title - English */}
-              <div className="mb-2" dir='ltr'>
-                <Typography variant="h2" className="fw-semibold text-white" style={{fontFamily: "serif", fontSize: "2.5rem"}}>
-                  Spiritual Journey
-                </Typography>
-                <Typography variant="h5" className="fw-medium text-white-50" style={{fontSize: '1.3rem'}}>
-                  Spiritual Growth Through Daily Practices
-                </Typography>
-              </div>
-             
-             {/* Content - English */}
-             <div className="d-flex flex-column gap-4" dir='ltr'>
-               <div className="p-4 rounded-3 border border-white border-opacity-25">
-                 <Typography variant="body1" className="text-white fw-medium mb-4" style={{fontSize: '1.1rem', lineHeight: 1.6}}>
-                   "Remembrance of Allah brings peace to the heart. The journey of spiritual growth begins with daily practices."
-                 </Typography>
-                 <Typography variant="subtitle1" className="fw-bold text-white">
-                   - Sheikh Muhammad
-                 </Typography>
-                 <Typography variant="body2" className="text-white-50">
-                   Guide of Naqshbandi Order
-                 </Typography>
-               </div>
-               
-               <div className="p-4 rounded-3 border border-white border-opacity-25">
-                 <Typography variant="subtitle1" className="fw-bold text-white mb-2">
-                   Spiritual Growth Through Daily Practices
-                 </Typography>
-                 <Typography variant="body2" className="text-white-50">
-                   Organize your daily routines and track your spiritual progress through consistent practice.
-                 </Typography>
-               </div>
-             </div>
-           </div>
-           
-           {/* Slider indicators */}
-           <div className="position-absolute start-50 translate-middle-x d-flex gap-2" 
-                style={{
-                  bottom: "20px",
-                  zIndex: 10
-                }}>
-             <div className="rounded-circle" 
+            {/* Urdu Section */}
+            <div className="position-absolute top-0 start-0 w-100 h-100 p-4 p-md-5 d-flex flex-column justify-content-between"
                   style={{
-                    width: '10px', 
-                    height: '10px', 
-                    backgroundColor: 'white',
-                    opacity: 0.7,
-                    animation: 'pulse1 10s infinite'
-                  }}></div>
-             <div className="rounded-circle" 
+                    opacity: 1,
+                    animation: 'slideSection1 10s infinite',
+                    zIndex: 2
+                  }}>
+              {/* Title - Urdu */}
+                <div className="text-end mb-2">
+                  <Typography variant="h2" className="fw-semibold text-white" style={{fontFamily: "serif", direction: "rtl", fontSize: "2.5rem"}}>
+                    رُوحَانِی سَفَر
+                  </Typography>
+                  <Typography variant="h5" className="fw-medium text-white-50 text-end" style={{direction: "rtl"}}>
+                    روزانہ کی عبادات کے ذریعے روحانی ترقی
+                  </Typography>
+                </div>
+              
+              {/* Content - Urdu */}
+              <div className="d-flex flex-column gap-4">
+                <div className="p-4 rounded-3 border border-white border-opacity-25">
+                  <Typography variant="body1" className="text-white fw-medium mb-4 text-end" style={{fontSize: '1.1rem', lineHeight: 1.6, direction: 'rtl'}}>
+                    "ذکر اللہ سے دل کو سکون ملتا ہے۔ روزانہ کے معمولات سے روحانی ترقی کا سفر شروع ہوتا ہے۔"
+                  </Typography>
+                  <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
+                    - شیخ محمد
+                  </Typography>
+                  <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
+                    مرشد سلسلہ نقشبندیہ
+                  </Typography>
+                </div>
+                
+                <div className="p-4 rounded-3 border border-white border-opacity-25">
+                  <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
+                    روحانی ترقی روزانہ کی عبادات کے ذریعے
+                  </Typography>
+                  <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
+                    اپنے روزانہ کے معمولات کو منظم کریں اور اپنی روحانی ترقی کا نقشہ دیکھیں۔
+                  </Typography>
+                </div>
+              </div>
+            </div>
+            
+            {/* English Section */}
+            <div className="position-absolute top-0 start-0 w-100 h-100 p-4 p-md-5 d-flex flex-column justify-content-between"
                   style={{
-                    width: '10px', 
-                    height: '10px', 
-                    backgroundColor: 'white',
-                    opacity: 0.7,
-                    animation: 'pulse2 10s infinite'
-                  }}></div>
-           </div>
-           
-           <style jsx>{`
-             @keyframes slideSection1 {
-               0%, 45%, 100% { opacity: 1; transform: translateX(0); }
-               50%, 95% { opacity: 0; transform: translateX(-100%); }
-             }
-             @keyframes slideSection2 {
-               0%, 45%, 100% { opacity: 0; transform: translateX(100%); }
-               50%, 95% { opacity: 1; transform: translateX(0); }
-             }
-             @keyframes pulse1 {
-               0%, 45%, 100% { opacity: 1; }
-               50%, 95% { opacity: 0.4; }
-             }
-             @keyframes pulse2 {
-               0%, 45%, 100% { opacity: 0.4; }
-               50%, 95% { opacity: 1; }
-             }
-           `}</style>
-         </TestimonialSection>
-        </LoginCard>
+                    opacity: 0,
+                    animation: 'slideSection2 10s infinite',
+                    zIndex: 1
+                  }}>
+              {/* Title - English */}
+                <div className="mb-2" dir='ltr'>
+                  <Typography variant="h2" className="fw-semibold text-white" style={{fontFamily: "serif", fontSize: "2.5rem"}}>
+                    Spiritual Journey
+                  </Typography>
+                  <Typography variant="h5" className="fw-medium text-white-50" style={{fontSize: '1.3rem'}}>
+                    Spiritual Growth Through Daily Practices
+                  </Typography>
+                </div>
+              
+              {/* Content - English */}
+              <div className="d-flex flex-column gap-4" dir='ltr'>
+                <div className="p-4 rounded-3 border border-white border-opacity-25">
+                  <Typography variant="body1" className="text-white fw-medium mb-4" style={{fontSize: '1.1rem', lineHeight: 1.6}}>
+                    "Remembrance of Allah brings peace to the heart. The journey of spiritual growth begins with daily practices."
+                  </Typography>
+                  <Typography variant="subtitle1" className="fw-bold text-white">
+                    - Sheikh Muhammad
+                  </Typography>
+                  <Typography variant="body2" className="text-white-50">
+                    Guide of Naqshbandi Order
+                  </Typography>
+                </div>
+                
+                <div className="p-4 rounded-3 border border-white border-opacity-25">
+                  <Typography variant="subtitle1" className="fw-bold text-white mb-2">
+                    Spiritual Growth Through Daily Practices
+                  </Typography>
+                  <Typography variant="body2" className="text-white-50">
+                    Organize your daily routines and track your spiritual progress through consistent practice.
+                  </Typography>
+                </div>
+              </div>
+            </div>
+            
+            {/* Slider indicators */}
+            <div className="position-absolute start-50 translate-middle-x d-flex gap-2" 
+                  style={{
+                    bottom: "20px",
+                    zIndex: 10
+                  }}>
+              <div className="rounded-circle" 
+                    style={{
+                      width: '10px', 
+                      height: '10px', 
+                      backgroundColor: 'white',
+                      opacity: 0.7,
+                      animation: 'pulse1 10s infinite'
+                    }}></div>
+              <div className="rounded-circle" 
+                    style={{
+                      width: '10px', 
+                      height: '10px', 
+                      backgroundColor: 'white',
+                      opacity: 0.7,
+                      animation: 'pulse2 10s infinite'
+                    }}></div>
+            </div>
+            
+            <style jsx>{`
+              @keyframes slideSection1 {
+                0%, 45%, 100% { opacity: 1; transform: translateX(0); }
+                50%, 95% { opacity: 0; transform: translateX(-100%); }
+              }
+              @keyframes slideSection2 {
+                0%, 45%, 100% { opacity: 0; transform: translateX(100%); }
+                50%, 95% { opacity: 1; transform: translateX(0); }
+              }
+              @keyframes pulse1 {
+                0%, 45%, 100% { opacity: 1; }
+                50%, 95% { opacity: 0.4; }
+              }
+              @keyframes pulse2 {
+                0%, 45%, 100% { opacity: 0.4; }
+                50%, 95% { opacity: 1; }
+              }
+            `}</style>
+          </TestimonialSection>
+          </LoginCard>
 
+        {/* Demo Accounts Section */}
+        <Box 
+          sx={{ 
+            mt: 3, 
+            mb: 4, 
+            mx: 'auto', 
+            maxWidth: 400, 
+            p: 2, 
+            borderRadius: 2, 
+            bgcolor: 'background.paper',
+            boxShadow: 3,
+            border: '1px solid',
+            borderColor: 'divider',
+            textAlign: 'center'
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'medium' }}>
+            Demo Accounts
+          </Typography>
+          
+          <Divider sx={{ mb: 2 }} />
+          
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 1, bgcolor: 'action.hover', borderRadius: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
+                <PersonIcon sx={{ mr: 1, fontSize: 18, color: 'primary.main' }} />
+                Email:
+              </Typography>
+              <Typography variant="body2" sx={{ fontFamily: 'monospace', bgcolor: 'background.default', px: 1, py: 0.5, borderRadius: 1 }}>
+                admin@tasbiaat.com
+              </Typography>
+            </Box>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 1, bgcolor: 'action.hover', borderRadius: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
+                <LockIcon sx={{ mr: 1, fontSize: 18, color: 'primary.main' }} />
+                Password:
+              </Typography>
+              <Typography variant="body2" sx={{ fontFamily: 'monospace', bgcolor: 'background.default', px: 1, py: 0.5, borderRadius: 1 }}>
+                admin123
+              </Typography>
+            </Box>
+          </Box>
+          
+          <Button 
+            variant="outlined" 
+            size="small" 
+            startIcon={<LoginIcon />}
+            onClick={() => {
+              // Auto-fill the form with demo credentials
+              document.querySelector('input[name="email"]').value = 'admin@tasbiaat.com';
+              document.querySelector('input[name="password"]').value = 'admin123';
+            }}
+          >
+            Use Demo Account
+          </Button>
+        </Box>
+      </Container>
        {/* Forgot Password Modal */}
        <Modal
          title={t('login.forgotPassword') || "Forgot Password"}
@@ -617,6 +995,12 @@ export default function LoginPage() {
                showIcon
                style={{ marginBottom: '16px' }}
              />
+             <div className="contact-details" style={{ padding: '16px', border: '1px solid #f0f0f0', borderRadius: '4px', marginBottom: '16px' }}>
+               <p><strong>{t('login.supervisorName') || "Name"}:</strong> {higherRoleContact.name}</p>
+               <p><strong>{t('login.supervisorRole') || "Role"}:</strong> {higherRoleContact.role}</p>
+               <p><strong>{t('login.supervisorEmail') || "Email"}:</strong> {higherRoleContact.email}</p>
+               <p><strong>{t('login.supervisorPhone') || "Phone"}:</strong> {higherRoleContact.phone}</p>
+             </div>
              
              <div style={{ background: '#f9f9f9', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
                <h4 style={{ margin: '0 0 8px 0' }}>{higherRoleContact.name} ({higherRoleContact.role})</h4>
