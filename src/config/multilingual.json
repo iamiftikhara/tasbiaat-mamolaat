@@ -65,6 +65,23 @@
   },
   "translations": {
     "ur": {
+      "login": {
+        "welcomeBack": "خوش آمدید",
+        "enterDetails": "اپنے اکاؤنٹ کی تفصیلات درج کریں",
+        "emailAddress": "ای میل ایڈریس",
+        "password": "پاس ورڈ",
+        "keepMeLoggedIn": "مجھے لاگ ان رکھیں",
+        "forgotPassword": "پاس ورڈ بھول گئے؟",
+        "signIn": "سائن ان کریں",
+        "enterEmailOrPhone": "ای میل یا فون نمبر درج کریں",
+        "enterEmailOrPhonePrompt": "اپنا اکاؤنٹ تلاش کرنے کے لیے اپنا ای میل یا فون نمبر درج کریں",
+        "emailOrPhone": "ای میل یا فون نمبر",
+        "submit": "جمع کرائیں",
+        "contactHigherRole": "اپنے سپروائزر سے رابطہ کریں",
+        "passwordResetMessage": "پاس ورڈ ری سیٹ آپ کے سپروائزر کے ذریعے منظم کیا جاتا ہے۔ براہ کرم ذیل تفصیلات کا استعمال کرتے ہوئے ان سے رابطہ کریں:",
+        "close": "بند کریں",
+        "errorContactingServer": "سرور سے رابطہ کرنے میں خرابی"
+      },
       "app": {
         "title": "البرہان تسبیحات معمولات",
         "subtitle": "روحانی ترقی کا نظام",
@@ -189,6 +206,23 @@
       }
     },
     "en": {
+      "login": {
+        "welcomeBack": "Welcome back",
+        "enterDetails": "Please enter your account details",
+        "emailAddress": "Email Address",
+        "password": "Password",
+        "keepMeLoggedIn": "Keep me logged in",
+        "forgotPassword": "Forgot Password?",
+        "signIn": "Sign in",
+        "enterEmailOrPhone": "Please enter your email or phone number",
+        "enterEmailOrPhonePrompt": "Enter your email or phone number to find your account",
+        "emailOrPhone": "Email or Phone Number",
+        "submit": "Submit",
+        "contactHigherRole": "Contact your supervisor",
+        "passwordResetMessage": "Password reset is managed by your supervisor. Please contact them using the details below:",
+        "close": "Close",
+        "errorContactingServer": "Error contacting server"
+      },
       "app": {
         "title": "Al-Burhan Tasbihat Mamolaat",
         "subtitle": "Spiritual Progress System",
