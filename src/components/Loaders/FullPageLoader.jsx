@@ -4,7 +4,7 @@ import React from 'react';
 import { Spin } from 'antd';
 
 const FullPageLoader = ({ 
-  message = "جاري التحميل...", 
+  message = "Loading...", 
   showMessage = true,
   variant = "default" // default, minimal, branded
 }) => {

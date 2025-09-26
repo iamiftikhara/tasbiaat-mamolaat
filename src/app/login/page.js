@@ -475,6 +475,17 @@ export default function LoginPage() {
     setLoading(true);
     
     try {
+      // Show loading message
+      toast.info('Logging in, please wait...', {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+      });
+
       // Encrypt password before sending to API
       const encryptedPassword = encryptPassword(password);
       
