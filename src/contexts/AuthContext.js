@@ -100,35 +100,45 @@ export function AuthProvider({ children }) {
   // Login function
   const login = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:5000/v1/auth/login', {
+      const response = await fetch('https://zikar-bd.vercel.app/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ phone_or_email: email, password }),
+        body: JSON.stringify({ email: email, password }),
       });
 
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
           const data = result.data;
-          setAuthToken(data.access_token);
-          setRefreshToken(data.refresh_token);
-          setUser(data.user);
+          
+          // Handle new response format
+          const token = data.token;
+          const userData = data.user;
+          const sessionData = data.session;
+          
+          // Set state
+          setAuthToken(token);
+          setUser(userData);
           
           // Store tokens and user data securely
-          storeTokens(data.access_token, data.refresh_token, data.user);
-        
+          storeTokens(token, null, userData);
+          
+          console.log('Login successful:', userData);
+          
           // Redirect based on role
           const roleRoutes = {
             Saalik: '/dashboard/saalik',
             Murabi: '/dashboard/murabi',
             Masool: '/dashboard/masool',
             Sheikh: '/dashboard/sheikh',
-            Admin: '/dashboard/admin'
+            Admin: '/dashboard/admin',
+            User: '/dashboard/user',
+            Guest: '/dashboard/guest'
           };
           
-          router.push(roleRoutes[data.user.role] || '/dashboard');
+          router.push(roleRoutes[userData.role] || '/dashboard');
           return { success: true };
         } else {
           return { success: false, error: result.message };
@@ -138,6 +148,7 @@ export function AuthProvider({ children }) {
         return { success: false, error: error.message || 'Login failed' };
       }
     } catch (error) {
+      console.error('Login error:', error);
       return { success: false, error: 'Network error occurred' };
     }
   };
@@ -162,11 +173,16 @@ export function AuthProvider({ children }) {
     const baseUrl = 'http://localhost:5000';
     const fullUrl = endpoint.startsWith('http') ? endpoint : `${baseUrl}${endpoint}`;
 
+    // Generate and encrypt system key for enhanced security
+    const systemKey = generateSystemKey();
+    const encryptedKey = encryptSystemKey(systemKey);
+
     const requestOptions = {
       method,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${currentToken}`,
+        'X-System-Key': encryptedKey
       },
     };
 

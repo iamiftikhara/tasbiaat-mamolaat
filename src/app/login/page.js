@@ -282,6 +282,38 @@ export default function LoginPage() {
   const { t, getCurrentFont, changeLanguage, currentLanguage, supportedLanguages, languages } = useMultilingual();
   const router = useRouter();
   
+  // Add useEffect to check for existing session and redirect
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkSession = () => {
+      const storedToken = localStorage.getItem('authToken');
+      const storedUser = localStorage.getItem('userData');
+      
+      if (storedToken && storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          
+          // Redirect based on role
+          const roleRoutes = {
+            Saalik: '/dashboard/saalik',
+            Murabi: '/dashboard/murabi',
+            Masool: '/dashboard/masool',
+            Sheikh: '/dashboard/sheikh',
+            Admin: '/dashboard/admin',
+            User: '/dashboard/user',
+            Guest: '/dashboard/guest'
+          };
+          
+          router.push(roleRoutes[userData.role] || '/dashboard');
+        } catch (error) {
+          console.error('Error parsing stored user data:', error);
+        }
+      }
+    };
+    
+    checkSession();
+  }, [router]);
+  
   // No need for toast configuration in useEffect as ToastContainer handles this
   useEffect(() => {
     // React-Toastify configuration is now handled by the ToastContainer component
@@ -446,25 +478,11 @@ export default function LoginPage() {
       // Encrypt password before sending to API
       const encryptedPassword = encryptPassword(password);
       
-      // Call the login API endpoint
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: identifier, // Send either email or phone in the email field
-          password: encryptedPassword
-        }),
-      });
+      // Use the login function from AuthContext directly
+      // This function handles API call, token storage, and redirection
+      const result = await login(identifier, encryptedPassword);
       
-      const data = await response.json();
-      
-      if (data.success) {
-        // Store tokens in localStorage or secure cookie
-        localStorage.setItem('access_token', data.data.access_token);
-        localStorage.setItem('refresh_token', data.data.refresh_token);
-        
+      if (result && result.success) {
         // Show success message with SweetAlert
         Swal.fire({
           icon: 'success',
@@ -474,15 +492,13 @@ export default function LoginPage() {
           timerProgressBar: true,
           showConfirmButton: false
         });
-        
-        // Call the login function from AuthContext to update the user state
-        await login(data.data.user, data.data.access_token);
+        // Redirection is handled by the login function in AuthContext
       } else {
         // Show error message with SweetAlert
         Swal.fire({
           icon: 'error',
           title: 'Login Failed',
-          text: data.message || 'Please try again.',
+          text: (result && result.message) || 'Please try again.',
           timer: 3000,
           timerProgressBar: true,
           confirmButtonText: 'OK',
@@ -711,7 +727,7 @@ export default function LoginPage() {
                 />
               ) : (
                 <Box sx={{ mb: 2 }}>
-                  <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Box sx={{ mb: 2 }}>
                     <MuiSelect
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
