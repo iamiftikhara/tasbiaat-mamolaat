@@ -80,7 +80,12 @@
         "contactHigherRole": "اپنے سپروائزر سے رابطہ کریں",
         "passwordResetMessage": "پاس ورڈ ری سیٹ آپ کے سپروائزر کے ذریعے منظم کیا جاتا ہے۔ براہ کرم ذیل تفصیلات کا استعمال کرتے ہوئے ان سے رابطہ کریں:",
         "close": "بند کریں",
-        "errorContactingServer": "سرور سے رابطہ کرنے میں خرابی"
+        "errorContactingServer": "سرور سے رابطہ کرنے میں خرابی",
+        "demoAccounts": "ڈیمو اکاؤنٹس",
+        "email": "ای میل",
+        "useDemoAccount": "ڈیمو اکاؤنٹ استعمال کریں",
+        "supervisorName": "نام",
+        "supervisorRole": "کردار"
       },
       "app": {
         "title": "البرہان تسبیحات معمولات",
@@ -207,21 +212,26 @@
     },
     "en": {
       "login": {
-        "welcomeBack": "Welcome back",
-        "enterDetails": "Please enter your account details",
+        "welcomeBack": "Welcome Back",
+        "enterDetails": "Enter your account details",
         "emailAddress": "Email Address",
         "password": "Password",
         "keepMeLoggedIn": "Keep me logged in",
         "forgotPassword": "Forgot Password?",
-        "signIn": "Sign in",
-        "enterEmailOrPhone": "Please enter your email or phone number",
+        "signIn": "Sign In",
+        "enterEmailOrPhone": "Enter your email or phone number",
         "enterEmailOrPhonePrompt": "Enter your email or phone number to find your account",
         "emailOrPhone": "Email or Phone Number",
         "submit": "Submit",
         "contactHigherRole": "Contact your supervisor",
         "passwordResetMessage": "Password reset is managed by your supervisor. Please contact them using the details below:",
         "close": "Close",
-        "errorContactingServer": "Error contacting server"
+        "errorContactingServer": "Error contacting server",
+        "demoAccounts": "Demo Accounts",
+        "email": "Email",
+        "useDemoAccount": "Use Demo Account",
+        "supervisorName": "Name",
+        "supervisorRole": "Role"
       },
       "app": {
         "title": "Al-Burhan Tasbihat Mamolaat",

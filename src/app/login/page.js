@@ -201,6 +201,68 @@ const AvatarGroup = styled(Box)({
   },
 });
 
+// Configuration for showing/hiding demo accounts section
+const appConfig = {
+  showDemoAccounts: true // Set to false to hide demo accounts section
+};
+
+// Demo accounts data structure
+const demoAccountsData = [
+  {
+    email: "admin@tasbiaat.com",
+    password: "admin123",
+    role: "Admin"
+  },
+  {
+    email: "user@tasbiaat.com",
+    password: "user123",
+    role: "User"
+  },
+  {
+    email: "guest@tasbiaat.com",
+    password: "guest123",
+    role: "Guest"
+  }
+];
+
+// Slider card data structure
+const sliderCardsData = [
+  {
+    en: {
+      quote: "اَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+      translation: "Verily, in the remembrance of Allah do hearts find rest.",
+      source: "Surah Ar-Ra'd, Verse 28"
+    },
+    ur: {
+      quote: "اَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+      translation: "سن لو! اللہ کے ذکر سے دلوں کو سکون ملتا ہے۔",
+      source: "سورۃ الرعد، آیت ٢٨"
+    }
+  },
+  {
+    en: {
+      quote: "Remembrance of Allah brings peace to the heart, purifies the soul, and enhances one's intellectual and spiritual capabilities.",
+      source: "Mufti Syed Mukhtar uddin Shah Sahib",
+      subtitle: "Guide of Chishtiya Order"
+    },
+    ur: {
+      quote: "ذکر اللہ سے دل کو سکون ملتا ہے، روح پاک ہوتی ہے، اور انسان کی فکری و روحانی صلاحیتیں بڑھتی ہیں۔",
+      source: "مفتی سید مختار الدین شاہ",
+      subtitle: "مرشد سلسلہ چشتیہ"
+    }
+  },
+  {
+    en: {
+      title: "Spiritual Growth Through Daily Practices",
+      description: "Organize your daily routines and track your spiritual progress through consistent practice."
+    },
+    ur: {
+      title: "روحانی ترقی روزانہ کی عبادات کے ذریعے",
+      description: "اپنے روزانہ کے معمولات کو منظم کریں اور اپنی روحانی ترقی کا نقشہ دیکھیں۔"
+    }
+  }
+];
+
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -791,26 +853,40 @@ export default function LoginPage() {
               
               {/* Content - Urdu */}
               <div className="d-flex flex-column gap-4">
-                <div className="p-4 rounded-3 border border-white border-opacity-25">
-                  <Typography variant="body1" className="text-white fw-medium mb-4 text-end" style={{fontSize: '1.1rem', lineHeight: 1.6, direction: 'rtl'}}>
-                    "ذکر اللہ سے دل کو سکون ملتا ہے۔ روزانہ کے معمولات سے روحانی ترقی کا سفر شروع ہوتا ہے۔"
-                  </Typography>
-                  <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
-                    - شیخ محمد
-                  </Typography>
-                  <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
-                    مرشد سلسلہ نقشبندیہ
-                  </Typography>
-                </div>
-                
-                <div className="p-4 rounded-3 border border-white border-opacity-25">
-                  <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
-                    روحانی ترقی روزانہ کی عبادات کے ذریعے
-                  </Typography>
-                  <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
-                    اپنے روزانہ کے معمولات کو منظم کریں اور اپنی روحانی ترقی کا نقشہ دیکھیں۔
-                  </Typography>
-                </div>
+                {sliderCardsData.map((card, index) => (
+                  <div key={`urdu-card-${index}`} className="p-2 rounded-3 border border-white border-opacity-25">
+                    {card.ur.quote && (
+                      <Typography variant="body1" className="text-white fw-medium mb-2 text-end" style={{fontSize: '1.1rem', lineHeight: 1.6, direction: 'rtl'}}>
+                        {card.ur.quote.startsWith('ا') ? `"${card.ur.quote}"` : card.ur.quote}
+                      </Typography>
+                    )}
+                    {card.ur.translation && (
+                      <Typography variant="body1" className="text-white fw-medium mb-4 text-end" style={{fontSize: '1rem', lineHeight: 1.6, direction: 'rtl'}}>
+                        {`"${card.ur.translation}"`}
+                      </Typography>
+                    )}
+                    {card.ur.source && (
+                      <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
+                        - {card.ur.source}
+                      </Typography>
+                    )}
+                    {card.ur.subtitle && (
+                      <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
+                        {card.ur.subtitle}
+                      </Typography>
+                    )}
+                    {card.ur.title && (
+                      <Typography variant="subtitle1" className="fw-bold text-white text-end" style={{direction: 'rtl'}}>
+                        {card.ur.title}
+                      </Typography>
+                    )}
+                    {card.ur.description && (
+                      <Typography variant="body2" className="text-white-50 text-end" style={{direction: 'rtl'}}>
+                        {card.ur.description}
+                      </Typography>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
             
@@ -833,26 +909,40 @@ export default function LoginPage() {
               
               {/* Content - English */}
               <div className="d-flex flex-column gap-4" dir='ltr'>
-                <div className="p-4 rounded-3 border border-white border-opacity-25">
-                  <Typography variant="body1" className="text-white fw-medium mb-4" style={{fontSize: '1.1rem', lineHeight: 1.6}}>
-                    "Remembrance of Allah brings peace to the heart. The journey of spiritual growth begins with daily practices."
-                  </Typography>
-                  <Typography variant="subtitle1" className="fw-bold text-white">
-                    - Sheikh Muhammad
-                  </Typography>
-                  <Typography variant="body2" className="text-white-50">
-                    Guide of Naqshbandi Order
-                  </Typography>
-                </div>
-                
-                <div className="p-4 rounded-3 border border-white border-opacity-25">
-                  <Typography variant="subtitle1" className="fw-bold text-white mb-2">
-                    Spiritual Growth Through Daily Practices
-                  </Typography>
-                  <Typography variant="body2" className="text-white-50">
-                    Organize your daily routines and track your spiritual progress through consistent practice.
-                  </Typography>
-                </div>
+                {sliderCardsData.map((card, index) => (
+                  <div key={`english-card-${index}`} className="p-2 rounded-3 border border-white border-opacity-25">
+                    {card.en.quote && (
+                      <Typography variant="body1" className="text-white fw-medium mb-2" style={{fontSize: '1rem', lineHeight: 1.6}}>
+                        {card.en.quote.startsWith('ا') ? `"${card.en.quote}"` : card.en.quote}
+                      </Typography>
+                    )}
+                    {card.en.translation && (
+                      <Typography variant="body1" className="text-white fw-medium mb-4" style={{fontSize: '1rem', lineHeight: 1.6}}>
+                        {`"${card.en.translation}"`}
+                      </Typography>
+                    )}
+                    {card.en.source && (
+                      <Typography variant="subtitle1" className="fw-bold text-white">
+                        - {card.en.source}
+                      </Typography>
+                    )}
+                    {card.en.subtitle && (
+                      <Typography variant="body2" className="text-white-50">
+                        {card.en.subtitle}
+                      </Typography>
+                    )}
+                    {card.en.title && (
+                      <Typography variant="subtitle1" className="fw-bold text-white mb-2">
+                        {card.en.title}
+                      </Typography>
+                    )}
+                    {card.en.description && (
+                      <Typography variant="body2" className="text-white-50">
+                        {card.en.description}
+                      </Typography>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
             
@@ -901,63 +991,78 @@ export default function LoginPage() {
           </TestimonialSection>
           </LoginCard>
 
-        {/* Demo Accounts Section */}
-        <Box 
-          sx={{ 
-            mt: 3, 
-            mb: 4, 
-            mx: 'auto', 
-            maxWidth: 400, 
-            p: 2, 
-            borderRadius: 2, 
-            bgcolor: 'background.paper',
-            boxShadow: 3,
-            border: '1px solid',
-            borderColor: 'divider',
-            textAlign: 'center'
-          }}
-        >
-          <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'medium' }}>
-            Demo Accounts
-          </Typography>
-          
-          <Divider sx={{ mb: 2 }} />
-          
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 1, bgcolor: 'action.hover', borderRadius: 1 }}>
-              <Typography variant="body2" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
-                <PersonIcon sx={{ mr: 1, fontSize: 18, color: 'primary.main' }} />
-                Email:
-              </Typography>
-              <Typography variant="body2" sx={{ fontFamily: 'monospace', bgcolor: 'background.default', px: 1, py: 0.5, borderRadius: 1 }}>
-                admin@tasbiaat.com
-              </Typography>
-            </Box>
-            
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', p: 1, bgcolor: 'action.hover', borderRadius: 1 }}>
-              <Typography variant="body2" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
-                <LockIcon sx={{ mr: 1, fontSize: 18, color: 'primary.main' }} />
-                Password:
-              </Typography>
-              <Typography variant="body2" sx={{ fontFamily: 'monospace', bgcolor: 'background.default', px: 1, py: 0.5, borderRadius: 1 }}>
-                admin123
-              </Typography>
-            </Box>
-          </Box>
-          
-          <Button 
-            variant="outlined" 
-            size="small" 
-            startIcon={<LoginIcon />}
-            onClick={() => {
-              // Auto-fill the form with demo credentials
-              document.querySelector('input[name="email"]').value = 'admin@tasbiaat.com';
-              document.querySelector('input[name="password"]').value = 'admin123';
+        {/* Demo Accounts Section - Conditionally rendered based on appConfig */}
+        {appConfig.showDemoAccounts && (
+          <Box 
+            sx={{ 
+              mt: 3, 
+              mb: 4, 
+              mx: 'auto', 
+              maxWidth: 400, 
+              p: 2, 
+              borderRadius: 2, 
+              bgcolor: 'background.paper',
+              boxShadow: 3,
+              border: '1px solid',
+              borderColor: 'divider',
+              textAlign: 'center',
+              direction: currentLanguage === 'en' ? 'ltr' : 'rtl'
             }}
           >
-            Use Demo Account
-          </Button>
-        </Box>
+            <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'medium' }}>
+              {t('login.demoAccounts') || "Demo Accounts"}
+            </Typography>
+            
+            <Divider sx={{ mb: 2 }} />
+            
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 2 }}>
+              {demoAccountsData.map((account, index) => (
+                <Box key={index} sx={{ display: 'flex', flexDirection: 'column', p: 1, bgcolor: 'action.hover', borderRadius: 1, mb: 1 }}>
+                  {account.role && (
+                    <Typography variant="caption" sx={{ alignSelf: 'flex-start', mb: 0.5, fontWeight: 'bold', color: 'primary.main' }}>
+                      {account.role}
+                    </Typography>
+                  )}
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
+                      <PersonIcon sx={{ mr: currentLanguage === 'en' ? 1 : 0, ml: currentLanguage === 'en' ? 0 : 1, fontSize: 18, color: 'primary.main' }} />
+                      {t('login.email') || "Email"}:
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontFamily: 'monospace', bgcolor: 'background.default', px: 1, py: 0.5, borderRadius: 1 }}>
+                      {account.email}
+                    </Typography>
+                  </Box>
+                  
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', mt: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'medium', display: 'flex', alignItems: 'center' }}>
+                      <LockIcon sx={{ mr: currentLanguage === 'en' ? 1 : 0, ml: currentLanguage === 'en' ? 0 : 1, fontSize: 18, color: 'primary.main' }} />
+                      {t('login.password') || "Password"}:
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontFamily: 'monospace', bgcolor: 'background.default', px: 1, py: 0.5, borderRadius: 1 }}>
+                      {account.password}
+                    </Typography>
+                  </Box>
+                  
+                  <Button 
+                    variant="outlined" 
+                    size="small"
+                    fullWidth
+                    sx={{ mt: 1 }}
+                    startIcon={currentLanguage === 'en' ? <LoginIcon /> : null}
+                    endIcon={currentLanguage !== 'en' ? <LoginIcon /> : null}
+                    onClick={() => {
+                      // Auto-fill the form with demo credentials
+                      document.querySelector('input[name="email"]').value = account.email;
+                      document.querySelector('input[name="password"]').value = account.password;
+                    }}
+                  >
+                    {t('login.useDemoAccount') || "Use This Account"}
+                  </Button>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
       </Container>
        {/* Forgot Password Modal */}
        <Modal
