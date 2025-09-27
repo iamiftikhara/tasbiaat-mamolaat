@@ -182,15 +182,15 @@ const AdminDashboard = () => {
           <div className={`min-h-screen bg-gray-50 ${language === 'ur' ? 'rtl font-urdu' : 'ltr'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="space-y-6">
-                <SkeletonLoaders.Card />
+                <SkeletonLoaders.CardSkeleton />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <SkeletonLoaders.Widget />
-                  <SkeletonLoaders.Widget />
-                  <SkeletonLoaders.Widget />
-                  <SkeletonLoaders.Widget />
+                  <SkeletonLoaders.WidgetSkeleton />
+                  <SkeletonLoaders.WidgetSkeleton />
+                  <SkeletonLoaders.WidgetSkeleton />
+                  <SkeletonLoaders.WidgetSkeleton />
                 </div>
-                <SkeletonLoaders.Table />
-                <SkeletonLoaders.Chart />
+                <SkeletonLoaders.TableSkeleton />
+                <SkeletonLoaders.ChartSkeleton />
               </div>
             </div>
           </div>

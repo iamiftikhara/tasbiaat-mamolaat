@@ -70,7 +70,7 @@ const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
         throw new Error('No refresh token available');
       }
 
-      const response = await fetch('http://localhost:5000/v1/auth/refresh', {
+      const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -176,8 +176,7 @@ const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
       throw new Error('No authentication token');
     }
 
-    const baseUrl = 'http://localhost:5000';
-    const fullUrl = endpoint.startsWith('http') ? endpoint : `${baseUrl}${endpoint}`;
+    const fullUrl = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
 
     // Generate and encrypt system key for enhanced security
     const systemKey = generateSystemKey();
@@ -241,7 +240,7 @@ const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 
           // Verify token with backend
           try {
-            const response = await fetch('http://localhost:5000/v1/auth/verify', {
+            const response = await fetch(`${API_BASE_URL}/auth/verify`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',

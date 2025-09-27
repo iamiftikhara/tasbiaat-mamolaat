@@ -9,7 +9,7 @@ const SkeletonBase = ({ className = "", children, animate = true }) => (
   </div>
 );
 
-// Card skeleton
+// Card skeleton - displays a loading state for card components
 export const CardSkeleton = ({ showHeader = true, showFooter = false }) => (
   <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
     {showHeader && (
