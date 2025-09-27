@@ -18,6 +18,12 @@ export function AuthProvider({ children }) {
   const REFRESH_TOKEN_KEY = 'refreshToken';
   const USER_DATA_KEY = 'userData';
 
+  // API base URL from environment variables
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+// Encryption key from environment variables
+const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
+
   // Token storage utilities
   const storeTokens = (accessToken, refreshToken, userData) => {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
@@ -100,7 +106,7 @@ export function AuthProvider({ children }) {
   // Login function
   const login = async (email, password) => {
     try {
-      const response = await fetch('https://zikar-bd.vercel.app/api/v1/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

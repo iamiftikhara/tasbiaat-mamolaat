@@ -15,11 +15,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CryptoJS from 'crypto-js';
 
-// API base URL
-const API_BASE_URL = 'https://zikar-bd.vercel.app/api/v1';
+// API base URL from environment variables
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-// Encryption key (in a real app, this should be stored securely)
-const ENCRYPTION_KEY = 'al-burhan-secure-key-2024';
+// Encryption key from environment variables
+const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 
 // Material UI imports
 import { 
@@ -203,7 +203,7 @@ const AvatarGroup = styled(Box)({
 
 // Configuration for showing/hiding demo accounts section
 const appConfig = {
-  showDemoAccounts: true // Set to false to hide demo accounts section
+  showDemoAccounts: process.env.NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS === 'true' // Use environment variable
 };
 
 // Demo accounts data structure
